@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+/*
+ * kinmosa-gen
+ * copyright (c) 2015 Susisu
+ */
+
+"use strict";
+
+var fs = require("fs");
+
+var packageInfo = require("../package.json");
+
+process.title = "kinmosa-gen";
+
+var program = require("commander");
+program.version(packageInfo.version, "-v, --version");
+program.parse(process.argv);
+
+var kin_iroP = readFile("data/kin-iro.txt"),
+    mosaicP  = readFile("data/mosaic.txt");
+
+Promise.all([kin_iroP, mosaicP]).then(
+    res => {
+        var kin_iro = res[0].trim().split(/[\r\n]+/),
+            mosaic  = res[1].trim().split(/[\r\n]+/);
+        console.log(pickRandom(kin_iro) + pickRandom(mosaic));
+        process.exit(0);
+    },
+    err => {
+        console.error(String(err));
+        process.exit(1);
+    }
+);
+
+function readFile(filename) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filename, { "encoding": "utf-8" }, (err, res) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(res);
+            }
+        });
+    });
+}
+
+function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
