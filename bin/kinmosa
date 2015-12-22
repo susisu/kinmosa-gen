@@ -16,8 +16,8 @@ var program = require("commander");
 program.version(packageInfo.version, "-v, --version");
 program.parse(process.argv);
 
-var kin_iroP = readFile("data/kin-iro.txt"),
-    mosaicP  = readFile("data/mosaic.txt");
+var kin_iroP = readFile(__dirname + "/../data/kin-iro.txt"),
+    mosaicP  = readFile(__dirname + "/../data/mosaic.txt");
 
 Promise.all([kin_iroP, mosaicP]).then(
     res => {
