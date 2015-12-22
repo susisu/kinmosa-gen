@@ -1,0 +1,1 @@
+# kinmosa-gen
