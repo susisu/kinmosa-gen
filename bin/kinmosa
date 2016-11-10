@@ -15,16 +15,22 @@ process.title = "kinmosa-gen";
 
 var program = require("commander");
 program.version(packageInfo.version, "-v, --version");
+program.option("-m, --movie", "output movie version");
 program.parse(process.argv);
 
 var kin_iroP = readFile(path.join(__dirname, "../data/kin-iro.txt")),
-    mosaicP  = readFile(path.join(__dirname, "../data/mosaic.txt"));
+    mosaicP  = readFile(path.join(__dirname, "../data/mosaic.txt")),
+    prettyP  = readFile(path.join(__dirname, "../data/pretty.txt"));
 
-Promise.all([kin_iroP, mosaicP]).then(
+Promise.all([kin_iroP, mosaicP, prettyP]).then(
     res => {
         var kin_iro = res[0].trim().split(/[\r\n]+/),
-            mosaic  = res[1].trim().split(/[\r\n]+/);
-        console.log(pickRandom(kin_iro) + pickRandom(mosaic));
+            mosaic  = res[1].trim().split(/[\r\n]+/),
+            pretty  = res[2].trim().split(/[\r\n]+/);
+        var out = program.movie
+            ? pickRandom(kin_iro) + pickRandom(mosaic) + " " + pickRandom(pretty) + " Days"
+            : pickRandom(kin_iro) + pickRandom(mosaic);
+        console.log(out);
         process.exit(0);
     },
     err => {
